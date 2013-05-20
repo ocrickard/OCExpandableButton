@@ -29,7 +29,16 @@ If you want to manually open/close the component (say the screen rotates, or the
 - (void)close;
 ```
 
+You can make the component reveal with left or right alignment using:
+```
+button.alignment = OCExpandableButtonAlignmentLeft;
+```
+or
+```
+button.alignment = OCExpandableButtonAlignmentRight;
+```
+
 TODO:
 
-- Implement the alignment setting in the class
+- Implement inner shadows like they have in Sparrow - Not sure what the right API looks like here.  Maybe just letting user specify images, or maybe using masks and drawing inner shadows manually?
 - Suggestions?
