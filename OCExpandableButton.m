@@ -22,7 +22,7 @@
 #define kBackgroundGradientColors @[(__bridge id)[UIColor colorWithRed:0.933 green:0.937 blue:0.945 alpha:0.900].CGColor, (__bridge id)[UIColor colorWithRed:0.804 green:0.824 blue:0.839 alpha:0.900].CGColor]
 #define kBackgroundStrokeColor [UIColor colorWithWhite:1.000 alpha:0.310].CGColor
 
-#define kSubviewHorizontalMargin 10.f
+#define kSubviewHorizontalMargin 3.f
 
 @interface OCExpandableButton () {
     CAShapeLayer *_arrowLayer;
@@ -397,6 +397,13 @@
     if(_active) {
         for(UIView *subview in _subviews) {
             if(CGRectContainsPoint(subview.frame, point)) {
+                [UIView animateWithDuration:0.4f delay:0.2f options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                    subview.transform = CGAffineTransformMakeScale(2.5f, 2.5f);
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:0.15f animations:^{
+                        subview.transform = CGAffineTransformIdentity;
+                    }];
+                }];
                 return subview;
             }
         }

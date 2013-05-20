@@ -31,7 +31,7 @@
     NSMutableArray *subviews = [[NSMutableArray alloc] init];
     
     for(int i = 0; i < 4; i++) {
-        UIButton *numberButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20.f, 30.f)];
+        UIButton *numberButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30.f, 30.f)];
         numberButton.backgroundColor = [UIColor clearColor];
         [numberButton setTitle:[NSString stringWithFormat:@"%d", i] forState:UIControlStateNormal];
         numberButton.titleLabel.textAlignment = NSTextAlignmentCenter;
