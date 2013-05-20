@@ -45,7 +45,7 @@
     // size.
     button = [[OCExpandableButton alloc] initWithFrame:CGRectMake(floorf(self.view.bounds.size.width*0.5f - 37.f*0.5f), self.view.bounds.size.height - 57, 37, 37) subviews:subviews];
     //You can change the alignment with:
-    //button.alignment = OCExpandableButtonAlignmentLeft;
+    button.alignment = OCExpandableButtonAlignmentLeft;
     [self.view addSubview:button];
     
     //You can open/close the button using the public methods.  So if you wanted
@@ -55,6 +55,10 @@
 
 - (void)tapped {
     NSLog(@"tapped");
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    button.frame = CGRectMake(floorf(self.view.bounds.size.width*0.5f - 37.f*0.5f), self.view.bounds.size.height - 57, 37, 37);
 }
 
 - (void)didReceiveMemoryWarning
