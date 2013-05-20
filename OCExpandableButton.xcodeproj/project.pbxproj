@@ -18,6 +18,8 @@
 		B1E7DBC0174847E3003291C6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B1E7DBBF174847E3003291C6 /* Default-568h@2x.png */; };
 		B1E7DBC3174847E3003291C6 /* OCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1E7DBC2174847E3003291C6 /* OCViewController.m */; };
 		B1E7DBC6174847E3003291C6 /* OCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1E7DBC4174847E3003291C6 /* OCViewController.xib */; };
+		B1E7DBCE174847F3003291C6 /* OCExpandableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B1E7DBCD174847F3003291C6 /* OCExpandableButton.m */; };
+		B1E7DBD0174848D3003291C6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1E7DBCF174848D3003291C6 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,9 @@
 		B1E7DBC1174847E3003291C6 /* OCViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCViewController.h; sourceTree = "<group>"; };
 		B1E7DBC2174847E3003291C6 /* OCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCViewController.m; sourceTree = "<group>"; };
 		B1E7DBC5174847E3003291C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/OCViewController.xib; sourceTree = "<group>"; };
+		B1E7DBCC174847F3003291C6 /* OCExpandableButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OCExpandableButton.h; path = ../OCExpandableButton.h; sourceTree = "<group>"; };
+		B1E7DBCD174847F3003291C6 /* OCExpandableButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OCExpandableButton.m; path = ../OCExpandableButton.m; sourceTree = "<group>"; };
+		B1E7DBCF174848D3003291C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1E7DBD0174848D3003291C6 /* QuartzCore.framework in Frameworks */,
 				B1E7DBAA174847E3003291C6 /* UIKit.framework in Frameworks */,
 				B1E7DBAC174847E3003291C6 /* Foundation.framework in Frameworks */,
 				B1E7DBAE174847E3003291C6 /* CoreGraphics.framework in Frameworks */,
@@ -73,6 +79,7 @@
 		B1E7DBA8174847E3003291C6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B1E7DBCF174848D3003291C6 /* QuartzCore.framework */,
 				B1E7DBA9174847E3003291C6 /* UIKit.framework */,
 				B1E7DBAB174847E3003291C6 /* Foundation.framework */,
 				B1E7DBAD174847E3003291C6 /* CoreGraphics.framework */,
@@ -88,6 +95,8 @@
 				B1E7DBC1174847E3003291C6 /* OCViewController.h */,
 				B1E7DBC2174847E3003291C6 /* OCViewController.m */,
 				B1E7DBC4174847E3003291C6 /* OCViewController.xib */,
+				B1E7DBCC174847F3003291C6 /* OCExpandableButton.h */,
+				B1E7DBCD174847F3003291C6 /* OCExpandableButton.m */,
 				B1E7DBB0174847E3003291C6 /* Supporting Files */,
 			);
 			path = OCExpandableButton;
@@ -177,6 +186,7 @@
 				B1E7DBB6174847E3003291C6 /* main.m in Sources */,
 				B1E7DBBA174847E3003291C6 /* OCAppDelegate.m in Sources */,
 				B1E7DBC3174847E3003291C6 /* OCViewController.m in Sources */,
+				B1E7DBCE174847F3003291C6 /* OCExpandableButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
