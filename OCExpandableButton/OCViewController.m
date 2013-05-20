@@ -44,7 +44,8 @@
     // the initial frame you provide.  You should provide a square rect of any
     // size.
     button = [[OCExpandableButton alloc] initWithFrame:CGRectMake(floorf(self.view.bounds.size.width*0.5f - 37.f*0.5f), self.view.bounds.size.height - 57, 37, 37) subviews:subviews];
-    button.alignment = OCExpandableButtonAlignmentLeft;
+    //You can change the alignment with:
+    //button.alignment = OCExpandableButtonAlignmentLeft;
     [self.view addSubview:button];
     
     //You can open/close the button using the public methods.  So if you wanted
