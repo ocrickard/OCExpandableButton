@@ -36,7 +36,6 @@
         [numberButton setTitle:[NSString stringWithFormat:@"%d", i] forState:UIControlStateNormal];
         numberButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         numberButton.titleLabel.textColor = [UIColor colorWithRed:0.494 green:0.498 blue:0.518 alpha:1];
-        numberButton.userInteractionEnabled = YES;
         [numberButton addTarget:self action:@selector(tapped) forControlEvents:UIControlEventTouchUpInside];
         [subviews addObject:numberButton];
     }
