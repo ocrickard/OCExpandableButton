@@ -30,7 +30,7 @@
     
     NSMutableArray *subviews = [[NSMutableArray alloc] init];
     
-    for(int i = 0; i < 5; i++) {
+    for(int i = 0; i < 4; i++) {
         UIButton *numberButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20.f, 30.f)];
         numberButton.backgroundColor = [UIColor clearColor];
         [numberButton setTitle:[NSString stringWithFormat:@"%d", i] forState:UIControlStateNormal];
@@ -43,7 +43,8 @@
     //Note to reader - the blue initial button is inset 3px on all sides from
     // the initial frame you provide.  You should provide a square rect of any
     // size.
-    button = [[OCExpandableButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 57, self.view.bounds.size.height - 57, 37, 37) subviews:subviews];
+    button = [[OCExpandableButton alloc] initWithFrame:CGRectMake(floorf(self.view.bounds.size.width*0.5f - 37.f*0.5f), self.view.bounds.size.height - 57, 37, 37) subviews:subviews];
+    button.alignment = OCExpandableButtonAlignmentLeft;
     [self.view addSubview:button];
     
     //You can open/close the button using the public methods.  So if you wanted

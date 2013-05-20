@@ -207,28 +207,8 @@
             newWidth += view.frame.size.width + kSubviewHorizontalMargin;
         }
         
-        CGFloat curX = -newWidth + self.bounds.size.width + kSubviewHorizontalMargin;
-        NSTimeInterval delay = 0.02f + 0.02f*_subviews.count;
-        //Animate in the items
-        for(UIView *view in _subviews) {
-            view.center = CGPointMake(curX + floorf(view.frame.size.width*0.5f), CGRectGetMidY(self.bounds));
-            view.hidden = NO;
-            view.alpha = 0.f;
-            view.transform = CGAffineTransformMakeScale(2.f, 2.f);
-            [UIView animateWithDuration:kAnimationDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
-                view.alpha = 1.f;
-                view.transform = CGAffineTransformIdentity;
-            } completion:nil];
-            delay -= 0.02f;
-            curX += view.frame.size.width + kSubviewHorizontalMargin;
-        }
-        
         //Animate in the gray background
         [self fadeLayer:_backgroundGradientLayer newOpacity:1.f duration:kAnimationDuration];
-        
-        [self setBoundsForLayer:_backgroundGradientLayer newBounds:CGRectMake(0, 0, newWidth, _backgroundGradientLayer.bounds.size.height) duration:kAnimationDuration];
-        CGPoint position = CGPointMake(_backgroundGradientLayer.position.x - 0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
-        [self setPositionForLayer:_backgroundGradientLayer newPosition:position duration:kAnimationDuration];
         
         //Change bg colors
         [self animateColorChangeForLayer:_arrowGradientLayer newColors:kActiveGradientColors duration:kAnimationDuration];
@@ -238,15 +218,58 @@
         [self fadeFillColorForLayer:_arrowLayer newColor:kActiveFillColor duration:kAnimationDuration];
         _arrowLayer.shadowOpacity = 0.f;
         
-        //Switch up the frames!
+	//We need to handle the layout of subviews for the different alignments
+	// differently.
         if(self.alignment == OCExpandableButtonAlignmentLeft) {
+	    //rotate
+	    [self rotateLayer:_arrowLayer byDegrees:90.f duration:kAnimationDuration];
             
-            //Do something?
+	    CGFloat curX = self.bounds.size.width + kSubviewHorizontalMargin;
+	    NSTimeInterval delay = 0.02f + 0.02f*_subviews.count;
+	    //Animate in the items
+	    for(UIView *view in _subviews) {
+		view.center = CGPointMake(curX + floorf(view.frame.size.width*0.5f), CGRectGetMidY(self.bounds));
+		view.hidden = NO;
+		view.alpha = 0.f;
+		view.transform = CGAffineTransformMakeScale(2.f, 2.f);
+		[UIView animateWithDuration:kAnimationDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+		    view.alpha = 1.f;
+		    view.transform = CGAffineTransformIdentity;
+		} completion:nil];
+		delay += 0.02f;
+		curX += view.frame.size.width + kSubviewHorizontalMargin;
+	    }
+
+	    //Expand the bg
+	    [self setBoundsForLayer:_backgroundGradientLayer newBounds:CGRectMake(0, 0, newWidth, _backgroundGradientLayer.bounds.size.height) duration:kAnimationDuration];
+	    CGPoint position = CGPointMake(_backgroundGradientLayer.position.x + 0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
+	    [self setPositionForLayer:_backgroundGradientLayer newPosition:position duration:kAnimationDuration];
             
         } else if(self.alignment == OCExpandableButtonAlignmentRight) {
             
             //rotate
             [self rotateLayer:_arrowLayer byDegrees:-90.f duration:kAnimationDuration];
+
+	    CGFloat curX = -newWidth + self.bounds.size.width + kSubviewHorizontalMargin;
+	    NSTimeInterval delay = 0.02f + 0.02f*_subviews.count;
+	    //Animate in the items
+	    for(UIView *view in _subviews) {
+		view.center = CGPointMake(curX + floorf(view.frame.size.width*0.5f), CGRectGetMidY(self.bounds));
+		view.hidden = NO;
+		view.alpha = 0.f;
+		view.transform = CGAffineTransformMakeScale(2.f, 2.f);
+		[UIView animateWithDuration:kAnimationDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+		    view.alpha = 1.f;
+		    view.transform = CGAffineTransformIdentity;
+		} completion:nil];
+		delay -= 0.02f;
+		curX += view.frame.size.width + kSubviewHorizontalMargin;
+	    }
+
+	    //Expand the bg
+	    [self setBoundsForLayer:_backgroundGradientLayer newBounds:CGRectMake(0, 0, newWidth, _backgroundGradientLayer.bounds.size.height) duration:kAnimationDuration];
+	    CGPoint position = CGPointMake(_backgroundGradientLayer.position.x - 0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
+	    [self setPositionForLayer:_backgroundGradientLayer newPosition:position duration:kAnimationDuration];
         }
         
     } else {
@@ -280,7 +303,8 @@
         
         //Switch up the frames!
         if(self.alignment == OCExpandableButtonAlignmentLeft) {
-            
+	    //rotate back to the start
+	    [self rotateLayer:_arrowLayer byDegrees:-90.f duration:kAnimationDuration];
         } else if(self.alignment == OCExpandableButtonAlignmentRight) {
             //rotate back to the start
             [self rotateLayer:_arrowLayer byDegrees:90.f duration:kAnimationDuration];
