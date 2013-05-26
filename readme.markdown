@@ -1,10 +1,8 @@
 #OCExpandableButton#
 
-<p align="center"><img src="https://raw.github.com/rnystrom/OCExpandableButton/master/animation.gif"/></p>
-
-##Intro##
-
 OCExpandableButton is a VERY simple component in native Objective C that mimics the behavior of the expanding menu in the Sparrow mail app.  You give it an array of subviews, and it presents them when it's activated.  It is a normal subview, so you're in charge of rotation, and anything extra.
+
+<p align="center"><img src="https://raw.github.com/rnystrom/OCExpandableButton/master/animation.gif"/></p>
 
 ##Usage##
 
