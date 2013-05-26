@@ -27,7 +27,7 @@ typedef enum {
 - (id)initWithFrame:(CGRect)frame;
 
 //These are the views that show in the bar when the control is expanded.
-- (void)setSubviews:(NSArray *)subviews;
+- (void)setOptionViews:(NSArray *)subviews;
 
 //Opens the control if the control is currently closed.  No effect if the button
 // is already open.

@@ -11,26 +11,27 @@
 
 #define kAnimationDuration 0.1f
 
-#define kInactiveGradientColors @[(__bridge id)[UIColor colorWithRed: 0.291 green: 0.475 blue: 0.768 alpha: 1].CGColor, (__bridge id)[UIColor colorWithRed: 0.079 green: 0.161 blue: 0.309 alpha: 1].CGColor]
-#define kInactiveStrokeColor [UIColor colorWithRed: 1 green: 1 blue: 1 alpha: 0.241].CGColor
+#define kInactiveGradientColors @[(__bridge id)[UIColor colorWithRed:65/255.f green:105/255.f blue:175/255.f alpha: 1].CGColor, (__bridge id)[UIColor colorWithRed:29/255.f green:47/255.f blue:97/255.f alpha: 1].CGColor]
+#define kInactiveStrokeColor [UIColor colorWithRed:20/255.f green:30/255.f blue:52/255.f alpha: 0.5f].CGColor
 #define kInactiveFillColor [UIColor whiteColor].CGColor
+#define kInactiveStrokeColors @[(__bridge id)[UIColor colorWithRed: 54/255.f green: 79/255.f blue: 134/255.f alpha: 1].CGColor, (__bridge id)[UIColor colorWithRed: 32/255.f green: 48/255.f blue: 87/255.f alpha: 1].CGColor]
 
-#define kActiveGradientColors @[(__bridge id)[UIColor colorWithRed:0.769 green:0.773 blue:0.792 alpha:1].CGColor, (__bridge id)[UIColor colorWithRed:0.710 green:0.722 blue:0.741 alpha:1].CGColor]
-#define kActiveStrokeColor [UIColor colorWithRed:0.455 green:0.458 blue:0.470 alpha:0.190].CGColor
+#define kActiveGradientColors @[(__bridge id)[UIColor colorWithRed:211/255.f green:214/255.f blue:218/255.f alpha:1].CGColor, (__bridge id)[UIColor colorWithRed:192/255.f green:197/255.f blue:202/255.f alpha:1].CGColor]
+#define kActiveStrokeColor [UIColor colorWithRed:175/255.f green:177/255.f blue:181/255.f alpha:1].CGColor
 #define kActiveFillColor [UIColor colorWithRed:0.494 green:0.498 blue:0.518 alpha:1].CGColor
 
-#define kBackgroundGradientColors @[(__bridge id)[UIColor colorWithRed:0.933 green:0.937 blue:0.945 alpha:0.900].CGColor, (__bridge id)[UIColor colorWithRed:0.804 green:0.824 blue:0.839 alpha:0.900].CGColor]
-#define kBackgroundStrokeColor [UIColor colorWithWhite:1.000 alpha:0.310].CGColor
+#define kBackgroundGradientColors @[(__bridge id)[UIColor colorWithRed:238/255.f green:240/255.f blue:245/255.f alpha:1].CGColor, (__bridge id)[UIColor colorWithRed:213/255.f green:218/255.f blue:224/255.f alpha:1].CGColor]
+#define kBackgroundStrokeColor [UIColor colorWithWhite:204/255.f alpha:1].CGColor
 
 #define kSubviewHorizontalMargin 3.f
 
 @interface OCExpandableButton () {
     CAShapeLayer *_arrowLayer;
     CAGradientLayer *_arrowGradientLayer;
-    
+
     CAGradientLayer *_backgroundGradientLayer;
     
-    NSArray *_subviews;
+    NSArray *_optionViews;
     
     BOOL _active;
 }
@@ -39,32 +40,46 @@
 
 @implementation OCExpandableButton
 
-- (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    self.backgroundColor = [UIColor clearColor];
-    if(self) {
-        _subviews = nil;
-        _active = NO;
-        self.alignment = OCExpandableButtonAlignmentRight;
-        self.userInteractionEnabled = YES;
-        [self setupSublayers];
-        self.clipsToBounds = NO;
+static void init(OCExpandableButton *self) {
+    self->_active = NO;
+    self.alignment = OCExpandableButtonAlignmentRight;
+    self.userInteractionEnabled = YES;
+    [self setupSublayers];
+    self.clipsToBounds = NO;
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        init(self);
     }
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame subviews:(NSArray *)subviews
-{
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        init(self);
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    self.backgroundColor = [UIColor clearColor];
+    if(self) {
+        init(self);
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame subviews:(NSArray *)subviews {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        _subviews = subviews;
-        _active = NO;
-        self.alignment = OCExpandableButtonAlignmentRight;
-        self.userInteractionEnabled = YES;
-        [self setupSublayers];
+        init(self);
+        _optionViews = subviews;
         [self setupSubviews];
-        self.clipsToBounds = NO;
     }
     return self;
 }
@@ -73,25 +88,25 @@
     _arrowLayer = nil;
     _arrowGradientLayer = nil;
     _backgroundGradientLayer = nil;
-    _subviews = nil;
+    _optionViews = nil;
 }
 
 #pragma mark - Subview Setup
 
-- (void)setSubviews:(NSArray *)subviews {
-    if(subviews != _subviews) {
-        if(_subviews) {
+- (void)setOptionViews:(NSArray *)subviews {
+    if(subviews != _optionViews) {
+        if(_optionViews) {
             for(UIView *subview in subviews) {
                 [subview removeFromSuperview];
             }
         }
-        _subviews = subviews;
+        _optionViews = subviews;
         [self setupSubviews];
     }
 }
 
 - (void)setupSubviews {
-    for(UIView *view in _subviews) {
+    for(UIView *view in _optionViews) {
         view.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
         view.alpha = 0.f;
         view.hidden = YES;
@@ -100,7 +115,7 @@
 }
 
 - (void)resetSubviews {
-    for(UIView *view in _subviews) {
+    for(UIView *view in _optionViews) {
         view.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
         view.alpha = 0.f;
         view.hidden = YES;
@@ -125,9 +140,9 @@
         _backgroundGradientLayer.opacity = 0.f;
         
         _backgroundGradientLayer.shadowColor = [UIColor blackColor].CGColor;
-        _backgroundGradientLayer.shadowOffset = CGSizeMake(0.f, 2.f);
-        _backgroundGradientLayer.shadowOpacity = 0.2f;
-        _backgroundGradientLayer.shadowRadius = 3.f;
+        _backgroundGradientLayer.shadowOffset = CGSizeMake(0.f, 1.f);
+        _backgroundGradientLayer.shadowOpacity = 0.16f;
+        _backgroundGradientLayer.shadowRadius = 4.f;
         
         [self.layer addSublayer:_backgroundGradientLayer];
     }
@@ -136,15 +151,19 @@
     
     //Construct the blue gradient layer
     {
-        
         _arrowGradientLayer = [CAGradientLayer layer];
         _arrowGradientLayer.frame = arrowButtonRect;
         _arrowGradientLayer.colors = kInactiveGradientColors;
         _arrowGradientLayer.startPoint = CGPointMake(0.5f, 0.f);
         _arrowGradientLayer.endPoint = CGPointMake(0.5f, 1.f);
         _arrowGradientLayer.borderColor = kInactiveStrokeColor;
-        _arrowGradientLayer.borderWidth = 0.5f;
+        _arrowGradientLayer.borderWidth = 1.f;
         _arrowGradientLayer.cornerRadius = 7.f;
+        
+        _arrowGradientLayer.shadowColor = [UIColor blackColor].CGColor;
+        _arrowGradientLayer.shadowOffset = CGSizeMake(0.f, 1.f);
+        _arrowGradientLayer.shadowOpacity = 0.4f;
+        _arrowGradientLayer.shadowRadius = 2.f;
         
         //Disable implicit animations
         _arrowGradientLayer.actions = @{@"onOrderIn" : [NSNull null], @"onOrderOut" : [NSNull null], @"sublayers" : [NSNull null], @"contents" : [NSNull null], @"bounds" : [NSNull null], @"transform" : [NSNull null], @"position" : [NSNull null]};
@@ -198,118 +217,105 @@
     
     if(_active) {
         
-        //The button is now active.  We have to expand the frame, change the
-        // colors of the bg, animate in the sub-buttons
-        
-        //Compute the new size
-        CGFloat newWidth = kSubviewHorizontalMargin + self.bounds.size.width;
-        for(UIView *view in _subviews) {
-            newWidth += view.frame.size.width + kSubviewHorizontalMargin;
-        }
-        
-        //Animate in the gray background
-        [self fadeLayer:_backgroundGradientLayer newOpacity:1.f duration:kAnimationDuration];
-        
-        //Change bg colors
-        [self animateColorChangeForLayer:_arrowGradientLayer newColors:kActiveGradientColors duration:kAnimationDuration];
-        _arrowGradientLayer.borderColor = kActiveStrokeColor;
-        
-        //Change the fill colors
-        [self fadeFillColorForLayer:_arrowLayer newColor:kActiveFillColor duration:kAnimationDuration];
-        _arrowLayer.shadowOpacity = 0.f;
-        
+        [self animateOpen];
+    } else {
+        [self animateClose];
+    }
+}
+
+- (void)animateOpen {
+    //The button is now active.  We have to expand the frame, change the
+    // colors of the bg, animate in the sub-buttons
+    
+    //Compute the new size
+    CGFloat newWidth = kSubviewHorizontalMargin + self.bounds.size.width;
+    for(UIView *view in _optionViews) {
+        newWidth += view.frame.size.width + kSubviewHorizontalMargin;
+    }
+    
+    //Animate in the gray background
+    [self fadeLayer:_backgroundGradientLayer newOpacity:1.f duration:kAnimationDuration];
+    
+    //Change bg colors
+    [self animateColorChangeForLayer:_arrowGradientLayer newColors:kActiveGradientColors duration:kAnimationDuration];
+    _arrowGradientLayer.borderColor = kActiveStrokeColor;
+    _arrowGradientLayer.shadowColor = [UIColor whiteColor].CGColor;
+    _arrowGradientLayer.shadowRadius = 0;
+    
+    //Change the fill colors
+    [self fadeFillColorForLayer:_arrowLayer newColor:kActiveFillColor duration:kAnimationDuration];
+    _arrowLayer.shadowOpacity = 0.f;
+    
 	//We need to handle the layout of subviews for the different alignments
 	// differently.
-        if(self.alignment == OCExpandableButtonAlignmentLeft) {
-	    //rotate
-	    [self rotateLayer:_arrowLayer byDegrees:90.f duration:kAnimationDuration];
-            
-	    CGFloat curX = self.bounds.size.width + kSubviewHorizontalMargin;
-	    NSTimeInterval delay = 0.02f + 0.02f*_subviews.count;
-	    //Animate in the items
-	    for(UIView *view in _subviews) {
-		view.center = CGPointMake(curX + floorf(view.frame.size.width*0.5f), CGRectGetMidY(self.bounds));
-		view.hidden = NO;
-		view.alpha = 0.f;
-		view.transform = CGAffineTransformMakeScale(2.f, 2.f);
-		[UIView animateWithDuration:kAnimationDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
-		    view.alpha = 1.f;
-		    view.transform = CGAffineTransformIdentity;
-		} completion:nil];
-		delay += 0.02f;
-		curX += view.frame.size.width + kSubviewHorizontalMargin;
-	    }
+    NSUInteger directionModifier = self.alignment == OCExpandableButtonAlignmentLeft ? 1 : -1;
+    
+    //rotate
+    [self rotateLayer:_arrowLayer byDegrees:90.f*directionModifier duration:kAnimationDuration];
+    
+    CGFloat curX = self.bounds.size.width + kSubviewHorizontalMargin;
+    if (self.alignment == OCExpandableButtonAlignmentRight) {
+        curX -= newWidth;
+    }
+    
+    NSTimeInterval delay = 0.02f + 0.02f*_optionViews.count;
+    //Animate in the items
+    for(UIView *view in _optionViews) {
+        view.center = CGPointMake(curX + floorf(view.frame.size.width*0.5f), CGRectGetMidY(self.bounds));
+        view.hidden = NO;
+        view.alpha = 0.f;
+        view.transform = CGAffineTransformMakeScale(2.f, 2.f);
+        [UIView animateWithDuration:kAnimationDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+            view.alpha = 1.f;
+            view.transform = CGAffineTransformIdentity;
+        } completion:nil];
+        delay += 0.02f*directionModifier;
+        curX += view.frame.size.width + kSubviewHorizontalMargin;
+    }
+    
+    //Expand the bg
+    [self setBoundsForLayer:_backgroundGradientLayer newBounds:CGRectMake(0, 0, newWidth, _backgroundGradientLayer.bounds.size.height) duration:kAnimationDuration];
+    CGPoint position = CGPointMake(_backgroundGradientLayer.position.x + 0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
+    [self setPositionForLayer:_backgroundGradientLayer newPosition:position duration:kAnimationDuration];
+}
 
-	    //Expand the bg
-	    [self setBoundsForLayer:_backgroundGradientLayer newBounds:CGRectMake(0, 0, newWidth, _backgroundGradientLayer.bounds.size.height) duration:kAnimationDuration];
-	    CGPoint position = CGPointMake(_backgroundGradientLayer.position.x + 0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
-	    [self setPositionForLayer:_backgroundGradientLayer newPosition:position duration:kAnimationDuration];
-            
-        } else if(self.alignment == OCExpandableButtonAlignmentRight) {
-            
-            //rotate
-            [self rotateLayer:_arrowLayer byDegrees:-90.f duration:kAnimationDuration];
-
-	    CGFloat curX = -newWidth + self.bounds.size.width + kSubviewHorizontalMargin;
-	    NSTimeInterval delay = 0.02f + 0.02f*_subviews.count;
-	    //Animate in the items
-	    for(UIView *view in _subviews) {
-		view.center = CGPointMake(curX + floorf(view.frame.size.width*0.5f), CGRectGetMidY(self.bounds));
-		view.hidden = NO;
-		view.alpha = 0.f;
-		view.transform = CGAffineTransformMakeScale(2.f, 2.f);
-		[UIView animateWithDuration:kAnimationDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
-		    view.alpha = 1.f;
-		    view.transform = CGAffineTransformIdentity;
-		} completion:nil];
-		delay -= 0.02f;
-		curX += view.frame.size.width + kSubviewHorizontalMargin;
-	    }
-
-	    //Expand the bg
-	    [self setBoundsForLayer:_backgroundGradientLayer newBounds:CGRectMake(0, 0, newWidth, _backgroundGradientLayer.bounds.size.height) duration:kAnimationDuration];
-	    CGPoint position = CGPointMake(_backgroundGradientLayer.position.x - 0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
-	    [self setPositionForLayer:_backgroundGradientLayer newPosition:position duration:kAnimationDuration];
-        }
-        
-    } else {
-        
-        //The button is inactive.  We have to contract the frame, change the
-        // colors, and animate out the sub-buttons.
-        
-        //Animate out the items
-        for(UIView *view in _subviews) {
-            [UIView animateWithDuration:kAnimationDuration delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                view.alpha = 0.f;
-                view.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-            } completion:^(BOOL finished) {
-                view.hidden = YES;
-            }];
-        }
-        
-        //Animate out the gray background
-        [self fadeLayer:_backgroundGradientLayer newOpacity:0.f duration:kAnimationDuration];
-        
-        _backgroundGradientLayer.bounds = self.bounds;
-        _backgroundGradientLayer.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-        
-        //Change bg colors
-        [self animateColorChangeForLayer:_arrowGradientLayer newColors:kInactiveGradientColors duration:kAnimationDuration];
-        _arrowGradientLayer.borderColor = kInactiveStrokeColor;
-        
-        //Change the fill colors
-        [self fadeFillColorForLayer:_arrowLayer newColor:kInactiveFillColor duration:kAnimationDuration];
-        _arrowLayer.shadowOpacity = 1.f;
-        
-        //Switch up the frames!
-        if(self.alignment == OCExpandableButtonAlignmentLeft) {
+- (void)animateClose {
+    //The button is inactive.  We have to contract the frame, change the
+    // colors, and animate out the sub-buttons.
+    
+    //Animate out the items
+    for(UIView *view in _optionViews) {
+        [UIView animateWithDuration:kAnimationDuration delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            view.alpha = 0.f;
+            view.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+        } completion:^(BOOL finished) {
+            view.hidden = YES;
+        }];
+    }
+    
+    //Animate out the gray background
+    [self fadeLayer:_backgroundGradientLayer newOpacity:0.f duration:kAnimationDuration];
+    
+    _backgroundGradientLayer.bounds = self.bounds;
+    _backgroundGradientLayer.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+    
+    //Change bg colors
+    [self animateColorChangeForLayer:_arrowGradientLayer newColors:kInactiveGradientColors duration:kAnimationDuration];
+    _arrowGradientLayer.borderColor = kInactiveStrokeColor;
+    _arrowGradientLayer.shadowColor = [UIColor blackColor].CGColor;
+    _arrowGradientLayer.shadowRadius = 2.f;
+    
+    //Change the fill colors
+    [self fadeFillColorForLayer:_arrowLayer newColor:kInactiveFillColor duration:kAnimationDuration];
+    _arrowLayer.shadowOpacity = 1.f;
+    
+    //Switch up the frames!
+    if(self.alignment == OCExpandableButtonAlignmentLeft) {
 	    //rotate back to the start
 	    [self rotateLayer:_arrowLayer byDegrees:-90.f duration:kAnimationDuration];
-        } else if(self.alignment == OCExpandableButtonAlignmentRight) {
-            //rotate back to the start
-            [self rotateLayer:_arrowLayer byDegrees:90.f duration:kAnimationDuration];
-        }
-        
+    } else if(self.alignment == OCExpandableButtonAlignmentRight) {
+        //rotate back to the start
+        [self rotateLayer:_arrowLayer byDegrees:90.f duration:kAnimationDuration];
     }
 }
 
@@ -395,7 +401,7 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     if(_active) {
-        for(UIView *subview in _subviews) {
+        for(UIView *subview in _optionViews) {
             if(CGRectContainsPoint(subview.frame, point)) {
                 [UIView animateWithDuration:0.4f delay:0.2f options:UIViewAnimationOptionAllowUserInteraction animations:^{
                     subview.transform = CGAffineTransformMakeScale(2.5f, 2.5f);

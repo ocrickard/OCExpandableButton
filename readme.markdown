@@ -1,7 +1,6 @@
 #OCExpandableButton#
 
-![Component in closed state](https://raw.github.com/ocrickard/OCExpandableButton/master/screen1.PNG)
-![Component in open state](https://raw.github.com/ocrickard/OCExpandableButton/master/screen2.PNG)
+<p align="center"><img src=""/></p>
 
 ##Intro##
 
@@ -11,7 +10,7 @@ OCExpandableButton is a VERY simple component in native Objective C that mimics 
 
 Usage of the control is totally simple, it works just like any other UIView:
 
-```
+```objc
 button = [[OCExpandableButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 57, self.view.bounds.size.height - 57, 37, 37) subviews:subviews];
 [self.view addSubview:button];
 ```
@@ -20,7 +19,7 @@ The array of subviews will be positioned and aligned upon opening of the control
 
 If you want to manually open/close the component (say the screen rotates, or the user begins to scroll), then you can use the following methods:
 
-```
+```objc
 //Opens the control if the control is currently closed.  No effect if the button
 // is already open.
 - (void)open;
@@ -30,11 +29,11 @@ If you want to manually open/close the component (say the screen rotates, or the
 ```
 
 You can make the component reveal with left or right alignment using:
-```
+```objc
 button.alignment = OCExpandableButtonAlignmentLeft;
 ```
 or
-```
+```objc
 button.alignment = OCExpandableButtonAlignmentRight;
 ```
 
