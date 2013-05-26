@@ -50,7 +50,7 @@
     
     //You can open/close the button using the public methods.  So if you wanted
     // to close the button on scroll or orientation change, you can do that.
-    [button open];
+//    [button open];
 }
 
 - (void)tapped {
