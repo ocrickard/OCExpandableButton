@@ -1,6 +1,6 @@
 #OCExpandableButton#
 
-<p align="center"><img src=""/></p>
+<p align="center"><img src="https://raw.github.com/rnystrom/OCExpandableButton/master/animation.gif"/></p>
 
 ##Intro##
 
