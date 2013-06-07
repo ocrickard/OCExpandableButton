@@ -248,7 +248,7 @@ static void init(OCExpandableButton *self) {
     
 	//We need to handle the layout of subviews for the different alignments
 	// differently.
-    NSUInteger directionModifier = self.alignment == OCExpandableButtonAlignmentLeft ? 1 : -1;
+    CGFloat directionModifier = self.alignment == OCExpandableButtonAlignmentLeft ? 1 : -1;
     
     //rotate
     [self rotateLayer:_arrowLayer byDegrees:90.f*directionModifier duration:kAnimationDuration];
@@ -275,7 +275,7 @@ static void init(OCExpandableButton *self) {
     
     //Expand the bg
     [self setBoundsForLayer:_backgroundGradientLayer newBounds:CGRectMake(0, 0, newWidth, _backgroundGradientLayer.bounds.size.height) duration:kAnimationDuration];
-    CGPoint position = CGPointMake(_backgroundGradientLayer.position.x + 0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
+    CGPoint position = CGPointMake(_backgroundGradientLayer.position.x + directionModifier*0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
     [self setPositionForLayer:_backgroundGradientLayer newPosition:position duration:kAnimationDuration];
 }
 
