@@ -9,7 +9,7 @@
 #import "OCExpandableButton.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kAnimationDuration 0.1f
+#define kAnimationDuration 0.2f
 
 #define kInactiveGradientColors @[(__bridge id)[UIColor colorWithRed:65/255.f green:105/255.f blue:175/255.f alpha: 1].CGColor, (__bridge id)[UIColor colorWithRed:29/255.f green:47/255.f blue:97/255.f alpha: 1].CGColor]
 #define kInactiveStrokeColor [UIColor colorWithRed:20/255.f green:30/255.f blue:52/255.f alpha: 0.5f].CGColor
@@ -52,6 +52,7 @@ static void init(OCExpandableButton *self) {
     self = [super init];
     if (self) {
         init(self);
+		self.delegate = nil;
     }
     return self;
 }
@@ -216,7 +217,6 @@ static void init(OCExpandableButton *self) {
     _active = !_active;
     
     if(_active) {
-        
         [self animateOpen];
     } else {
         [self animateClose];
@@ -277,6 +277,10 @@ static void init(OCExpandableButton *self) {
     [self setBoundsForLayer:_backgroundGradientLayer newBounds:CGRectMake(0, 0, newWidth, _backgroundGradientLayer.bounds.size.height) duration:kAnimationDuration];
     CGPoint position = CGPointMake(_backgroundGradientLayer.position.x + directionModifier*0.5f*(_backgroundGradientLayer.bounds.size.width - self.bounds.size.width), CGRectGetMidY(self.bounds));
     [self setPositionForLayer:_backgroundGradientLayer newPosition:position duration:kAnimationDuration];
+	
+	// notify
+	if (self.delegate != nil)
+		[self.delegate expandableButtonOpened:self];
 }
 
 - (void)animateClose {
@@ -317,6 +321,10 @@ static void init(OCExpandableButton *self) {
         //rotate back to the start
         [self rotateLayer:_arrowLayer byDegrees:90.f duration:kAnimationDuration];
     }
+	
+	// notify
+	if (self.delegate != nil)
+		[self.delegate expandableButtonClosed:self];
 }
 
 - (void)setPositionForLayer:(CALayer *)layer newPosition:(CGPoint)point duration:(NSTimeInterval)duration {
