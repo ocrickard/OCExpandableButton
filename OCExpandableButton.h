@@ -16,9 +16,20 @@ typedef enum {
     OCExpandableButtonAlignmentRight
 } OCExpandableButtonAlignment;
 
+@class OCExpandableButton;
+
+// The delegate allows notification of expandable button opening/closure
+@protocol OCExpandableButtonDelegate
+
+- (void)expandableButtonOpened:(OCExpandableButton*)button;
+- (void)expandableButtonClosed:(OCExpandableButton*)button;
+
+@end
+
 @interface OCExpandableButton : UIView
 
 @property (nonatomic, assign) OCExpandableButtonAlignment alignment;
+@property (nonatomic, strong) id<OCExpandableButtonDelegate> delegate;
 
 //initialize with a specific set of subviews
 - (id)initWithFrame:(CGRect)frame subviews:(NSArray *)subviews;

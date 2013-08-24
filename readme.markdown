@@ -35,6 +35,19 @@ or
 button.alignment = OCExpandableButtonAlignmentRight;
 ```
 
+You can use the delegate property in order to notify of the control's opening/closure.
+
+	@interface MyClass : NSObject <OCExpandableButtonDelegate>
+		...
+	@end
+	
+	@implementation MyClass
+	...
+	- (void)expandableButtonClosed:(OCExpandableButton*)button
+	{ ... }
+	- (void)expandableButtonOpened:(OCExpandableButton*)button
+	{ ... }
+
 TODO:
 
 - Implement inner shadows like they have in Sparrow - Not sure what the right API looks like here.  Maybe just letting user specify images, or maybe using masks and drawing inner shadows manually?
